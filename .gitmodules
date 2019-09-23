@@ -1,0 +1,3 @@
+[submodule "XTest"]
+    path = XTest
+    url = https://github.com/xstater/XTest
