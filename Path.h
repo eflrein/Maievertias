@@ -5,8 +5,8 @@
 #include <list>
 #include <iostream>
 
-/* Windows    C:\Users\fuck.txt
- * Unix    \usr\fuck.txt
+/* Windows  C:\Users\fuck.txt
+ * Unix     /usr/fuck.txt
  */
 
 namespace maievertias{
@@ -16,29 +16,30 @@ namespace maievertias{
         
         class iterator{
         public:
-            iterator(string_iterator itr,string_iterator end);
+            using itr_t = std::list<std::pair<string_iterator,string_iterator>>::iterator;
+
+            iterator(itr_t itr);
             ~iterator();
             
-            iterator &operator++()noexcept
+            iterator &operator++()noexcept;
             const iterator operator++(int)noexcept;
             
-            bool operator==()const noexcept;
-            bool operator!=()const noexcept;
+            bool operator==(const iterator &)const noexcept;
+            bool operator!=(const iterator &)const noexcept;
             
             Path operator*()const noexcept;
         protected:
         private:
-            string_iterator m_itr;
-            string_iterator m_end;
-        }
+            itr_t m_itr;
+        };
     
-        Path(const std::string &str);
+        Path(std::string str,char separator = '/');
         Path(const Path &);
-        Path(Path &&);
+        Path(Path &&)noexcept;
         ~Path();
         
         Path &operator=(const Path &);
-        Path &operator=(Path &&);
+        Path &operator=(Path &&)noexcept;
         
         const char *c_str()const noexcept;
 
@@ -49,16 +50,27 @@ namespace maievertias{
         Path stem()const noexcept;
         Path root()const noexcept;
         bool empty()const noexcept;
+
+        bool hasRoot()const noexcept;
+
+        Path &changeSeparator(char seperator)noexcept;
         
         iterator begin();
         iterator end();
         
-        friend std::ostream &operator<<(std::ostream &os,const Path &os);
-        friend std::istream &operator<<(std::istream &is,const Path &os);
+        friend std::ostream &operator<<(std::ostream &os,const Path &path){
+            os << path.m_raw_path;
+            return os;
+        }
+        /*friend std::istream &operator>>(std::istream &is,      Path &path){
+
+        }*/
     protected:
     private:
+        char m_separator;
+        bool m_has_root;
         std::string m_raw_path;
-        
+        std::list<std::pair<string_iterator,string_iterator>> m_components;//the pair of iterators describe a range (component)
     };
 }
 

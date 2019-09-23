@@ -5,7 +5,11 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -g -pg")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O2 ")
 
-set(SOURCE_FILES
-	Path.cpp)
+include_directories(.)
 
-add_executable(test1 tests/test1.cpp ${SOURCE_FILES})
+set(SOURCE_FILES
+		Path.cpp
+		#File.cpp
+		)
+
+add_executable(test-path tests/test-path.cpp ${SOURCE_FILES})
