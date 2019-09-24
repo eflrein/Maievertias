@@ -2,9 +2,6 @@
 
 #include <utility>
 
-#include "XTest/Info.h"
-#include "XTest/Assert.h"
-
 namespace maievertias{
     ///iterator
     Path::iterator::iterator(Path::iterator::itr_t itr)
@@ -36,8 +33,8 @@ namespace maievertias{
     }
 
     ///Path
-    Path::Path(std::string str,char separator)
-        :m_separator(separator),
+    Path::Path(std::string str)
+        :m_separator('/'),
          m_has_root(false),
          m_raw_path(std::move(str)),
          m_components(){
@@ -46,37 +43,43 @@ namespace maievertias{
         //cache some var
         auto beg = m_raw_path.begin();
         auto end = m_raw_path.end();
-        //place all separator
-        for(char &itr : m_raw_path){
-            if(itr == '/' || itr == '\\'){
-                itr = separator;
+        //detect separator
+        for(auto &c:m_raw_path){
+            if(c == '\\'){
+                m_separator = '\\';
+                break;
+            }else if(c == '/'){
+                m_separator = '/';
+                break;
+            }
+        }
+        //replace all separator
+        for(auto &c:m_raw_path){
+            if(c == '/' || c == '\\'){
+                c = m_separator;
             }
         }
         //detect root
         auto itr = beg;
-        if(*itr == separator){
+        if(*itr == m_separator){
             //separator is the 1st character
             //root directory
             m_has_root = true;
             ++itr;
             m_components.emplace_back(beg,itr);
         }else{
-            for(;itr != end && *itr != separator;++itr);
+            for(;itr != end && *itr != m_separator;++itr);
             --itr;
             if(*itr == ':'){
                 //windows derive symbol
                 m_has_root = true;
-                ++itr;
-                m_components.emplace_back(beg,itr);
-                ++itr; //skip the separator
-            }else{
-                itr = beg;
             }
+            itr = beg;
         }
         //split component
         for(auto itrl = itr;itrl != end;){
             auto itrr = std::next(itrl);
-            for(;itrr != end && *itrr != separator;++itrr);
+            for(;itrr != end && *itrr != m_separator;++itrr);
             if(itrr == end){
                 m_components.emplace_back(itrl,end);
                 break;
@@ -85,7 +88,6 @@ namespace maievertias{
                 itrl = std::next(itrr);
             }
         }
-        INFO("HERE");
     }
 
     Path::Path(const Path &) = default;
@@ -98,32 +100,73 @@ namespace maievertias{
 
     Path &Path::operator=(Path &&) noexcept = default;
 
-//    Path Path::name() const noexcept{
-//        return Path(__cxx11::basic_string());
-//    }
-//
-//    Path Path::extension() const noexcept{
-//        return Path(__cxx11::basic_string());
-//    }
-//
-//    Path Path::parent() const noexcept{
-//        return Path(__cxx11::basic_string());
-//    }
-//
-//    Path Path::path() const noexcept{
-//        return Path(__cxx11::basic_string());
-//    }
-//
-//    Path Path::stem() const noexcept{
-//        return Path(__cxx11::basic_string());
-//    }
-//
-//    Path Path::root() const noexcept{
-//        return Path(__cxx11::basic_string());
-//    }
+    const char *Path::c_str() const noexcept{
+        return m_raw_path.c_str();
+    }
+
+    Path Path::name() const{
+        auto &p = m_components.back();
+        return Path(std::string(p.first,p.second));
+    }
+
+    Path Path::extension() const{
+        auto &p = m_components.back();
+        auto point_itr = p.first;
+        for(auto itr = p.first; itr != p.second;++itr){
+            if(*itr == '.'){
+                point_itr = itr;
+            }
+        }
+        if(point_itr == p.first){
+            return Path(std::string(p.second,p.second));
+        }else{
+            return Path(std::string(std::next(point_itr),p.second));
+        }
+    }
+
+    Path Path::parent() const{
+        if(m_components.size() < 2){
+            return Path("");
+        }else{
+            auto itr = m_components.end();
+            itr = std::prev(itr);
+            itr = std::prev(itr);
+            return Path(std::string(m_raw_path.cbegin(),itr->second));
+        }
+    }
+
+    Path Path::path() const{
+        return Path(*this);
+    }
+
+    Path Path::root() const {
+        if(hasRoot()){
+            auto &p = m_components.front();
+            return Path(std::string(p.first,p.second));
+        }
+        return Path("");
+    }
 
     bool Path::empty() const noexcept{
         return m_raw_path.empty();
+    }
+
+    bool Path::absolute() const noexcept{
+        return hasRoot();
+    }
+
+    bool Path::relative() const noexcept{
+        return !hasRoot();
+    }
+
+    Path &Path::changeSeparator(char seperator) noexcept{
+        m_separator = seperator;
+        for(auto &c:m_raw_path){
+            if(c == '/' || c == '\\'){
+                c = m_separator;
+            }
+        }
+        return *this;
     }
 
     Path::iterator Path::begin(){
@@ -137,6 +180,7 @@ namespace maievertias{
     bool Path::hasRoot() const noexcept{
         return m_has_root;
     }
+
 
 
 }

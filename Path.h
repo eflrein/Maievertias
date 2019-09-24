@@ -13,10 +13,11 @@ namespace maievertias{
     class Path{
     public:
         using string_iterator = std::string::iterator;
+        using const_string_iterator = std::string::const_iterator;
         
         class iterator{
         public:
-            using itr_t = std::list<std::pair<string_iterator,string_iterator>>::iterator;
+            using itr_t = std::list<std::pair<const_string_iterator,const_string_iterator>>::iterator;
 
             iterator(itr_t itr);
             ~iterator();
@@ -33,7 +34,7 @@ namespace maievertias{
             itr_t m_itr;
         };
     
-        Path(std::string str,char separator = '/');
+        Path(std::string str);
         Path(const Path &);
         Path(Path &&)noexcept;
         ~Path();
@@ -43,13 +44,14 @@ namespace maievertias{
         
         const char *c_str()const noexcept;
 
-        Path name()const noexcept;
-        Path extension()const noexcept;
-        Path parent()const noexcept;
-        Path path()const noexcept;
-        Path stem()const noexcept;
-        Path root()const noexcept;
+        Path name()const;
+        Path extension()const;
+        Path parent()const;
+        Path path()const;
+        Path root()const;
         bool empty()const noexcept;
+        bool absolute()const noexcept;
+        bool relative()const noexcept;
 
         bool hasRoot()const noexcept;
 
@@ -62,15 +64,15 @@ namespace maievertias{
             os << path.m_raw_path;
             return os;
         }
-        /*friend std::istream &operator>>(std::istream &is,      Path &path){
-
-        }*/
+//        friend std::istream &operator>>(std::istream &is,      Path &path){
+//
+//        }
     protected:
     private:
         char m_separator;
         bool m_has_root;
         std::string m_raw_path;
-        std::list<std::pair<string_iterator,string_iterator>> m_components;//the pair of iterators describe a range (component)
+        std::list<std::pair<const_string_iterator,const_string_iterator>> m_components;//the pair of iterators describe a range (component)
     };
 }
 
