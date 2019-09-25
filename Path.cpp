@@ -181,6 +181,62 @@ namespace maievertias{
         return m_has_root;
     }
 
+    bool Path::operator==(const Path &rhs) const noexcept{
+        return m_raw_path == rhs.m_raw_path;
+    }
+
+    bool Path::operator!=(const Path &rhs) const noexcept{
+        return m_raw_path != rhs.m_raw_path;;
+    }
+
+    bool Path::operator<=(const Path &rhs) const noexcept{
+        return m_raw_path <= rhs.m_raw_path;;
+    }
+
+    bool Path::operator>=(const Path &rhs) const noexcept{
+        return m_raw_path >= rhs.m_raw_path;;
+    }
+
+    bool Path::operator<(const Path &rhs) const noexcept{
+        return m_raw_path < rhs.m_raw_path;;
+    }
+
+    bool Path::operator>(const Path &rhs) const noexcept{
+        return m_raw_path > rhs.m_raw_path;;
+    }
+
+    bool Path::isSelf() const noexcept{
+        return name() == Path(".");
+    }
+
+    bool Path::isParent() const noexcept{
+        return name() == Path("..");
+    }
+
+    bool Path::isHome() const noexcept{
+        return name() == Path("~");
+    }
+
+    Path Path::operator/(const Path &rhs) const noexcept{
+        if(m_raw_path.back() == m_separator){
+            return Path(m_raw_path+rhs.m_raw_path).changeSeparator(m_separator);
+        }
+        auto res = *this;
+        res.m_raw_path.push_back(m_separator);
+        res.m_raw_path += rhs.m_raw_path;
+        res.changeSeparator(m_separator);
+        return res;
+    }
+
+    Path &Path::operator/=(const Path &rhs) noexcept{
+        if(m_raw_path.back() == m_separator){
+            m_raw_path += rhs.m_raw_path;
+            return this->changeSeparator(m_separator);
+        }
+        m_raw_path.push_back(m_separator);
+        m_raw_path += rhs.m_raw_path;
+        return this->changeSeparator(m_separator);
+    }
 
 
 }

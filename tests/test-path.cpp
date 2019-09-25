@@ -77,6 +77,19 @@ CASE_BEGIN(cstr_test)
     INFO("c_str:",fs::Path("C:\\Windows\\fuck.inf").c_str());
 CASE_END
 
+CASE_BEGIN(operator_connnect_test)
+    fs::Path p1("/usr/cnm\\");
+    fs::Path p2("fuck.txt\\");
+    INFO("operator/:",p1 / p2);
+    INFO("operator/=",p1/=p2);
+CASE_END
+
+CASE_BEGIN(special_dir_test)
+    ASSERT(fs::Path(".").isSelf(),"check isSelf()");
+    ASSERT(fs::Path("..").isParent(),"check isParent()");
+    ASSERT(fs::Path("~").isHome(),"check isHome()");
+CASE_END
+
 RUN(empty_path,
     unix_root_and_iterator,
     //unix_root2_and_iterator,
@@ -84,4 +97,6 @@ RUN(empty_path,
     change_separator,
     path_component_test_1,
     absulote_test,
-    cstr_test)
+    cstr_test,
+    operator_connnect_test,
+    special_dir_test)

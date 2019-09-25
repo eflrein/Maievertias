@@ -41,6 +41,16 @@ namespace maievertias{
         
         Path &operator=(const Path &);
         Path &operator=(Path &&)noexcept;
+
+        bool operator==(const Path &rhs)const noexcept;
+        bool operator!=(const Path &rhs)const noexcept;
+        bool operator<=(const Path &rhs)const noexcept;
+        bool operator>=(const Path &rhs)const noexcept;
+        bool operator< (const Path &rhs)const noexcept;
+        bool operator> (const Path &rhs)const noexcept;
+
+        Path operator/(const Path &rhs)const noexcept;
+        Path &operator/=(const Path &rhs)noexcept;
         
         const char *c_str()const noexcept;
 
@@ -54,6 +64,11 @@ namespace maievertias{
         bool relative()const noexcept;
 
         bool hasRoot()const noexcept;
+
+        bool isSelf()const noexcept;
+        bool isParent()const noexcept;
+        bool isHome()const noexcept;
+
 
         Path &changeSeparator(char seperator)noexcept;
         
