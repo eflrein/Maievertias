@@ -10,7 +10,7 @@ include_directories(.)
 set(SOURCE_FILES
 		Path.cpp
 		FilePosix.cpp
-		)
+		DirectoryPosix.cpp)
 
 add_executable(test-path tests/test-path.cpp ${SOURCE_FILES})
 

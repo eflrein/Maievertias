@@ -4,12 +4,13 @@
 
 namespace maievertias{
 
-    File::GetInfoError::GetInfoError(int err)
+    ///FileError
+    File::FileError::FileError(int err)
         :m_err(err){}
 
-    File::GetInfoError::~GetInfoError() = default;
+    File::FileError::~FileError() = default;
 
-    const char *File::GetInfoError::what() const noexcept{
+    const char *File::FileError::what() const noexcept{
         switch(m_err){
             case ENOENT:
                 return "No such file or directory";
@@ -55,6 +56,7 @@ namespace maievertias{
         }
     }
 
+    ///File
     File::File(Path path)
         :m_stated(false),
          m_stat{},
@@ -69,7 +71,7 @@ namespace maievertias{
     bool File::isRegularFile(){
         if(!m_stated){
             if(stat(m_path.c_str(),&m_stat)!=0){
-                throw GetInfoError(errno);
+                throw FileError(errno);
             }
             m_stated = true;
         }
@@ -79,7 +81,7 @@ namespace maievertias{
     bool File::isDirectory(){
         if(!m_stated){
             if(stat(m_path.c_str(),&m_stat)!=0){
-                throw GetInfoError(errno);
+                throw FileError(errno);
             }
             m_stated = true;
         }
@@ -89,7 +91,7 @@ namespace maievertias{
     bool File::isFIFO(){
         if(!m_stated){
             if(stat(m_path.c_str(),&m_stat)!=0){
-                throw GetInfoError(errno);
+                throw FileError(errno);
             }
             m_stated = true;
         }
@@ -99,7 +101,7 @@ namespace maievertias{
     bool File::isBlockFile(){
         if(!m_stated){
             if(stat(m_path.c_str(),&m_stat)!=0){
-                throw GetInfoError(errno);
+                throw FileError(errno);
             }
             m_stated = true;
         }
@@ -109,32 +111,14 @@ namespace maievertias{
     bool File::isCharacterFile(){
         if(!m_stated){
             if(stat(m_path.c_str(),&m_stat)!=0){
-                throw GetInfoError(errno);
+                throw FileError(errno);
             }
             m_stated = true;
         }
         return S_ISCHR(m_stat.st_mode);
     }
 
-    bool File::isSocket(){
-        if(!m_stated){
-            if(stat(m_path.c_str(),&m_stat)!=0){
-                throw GetInfoError(errno);
-            }
-            m_stated = true;
-        }
-        return S_ISSOCK(m_stat.st_mode);
-    }
 
-    bool File::isSymlink(){
-        if(!m_stated){
-            if(stat(m_path.c_str(),&m_stat)!=0){
-                throw GetInfoError(errno);
-            }
-            m_stated = true;
-        }
-        return S_ISLINK(m_stat.st_mode);
-    }
 
     bool File::exist() const noexcept{
         return access(m_path.c_str(),F_OK) == 0;
@@ -143,4 +127,15 @@ namespace maievertias{
     File::operator bool() const noexcept{
         return exist();
     }
+
+    std::uint32_t File::size(){
+        if(!m_stated){
+            if(stat(m_path.c_str(),&m_stat)!=0){
+                throw FileError(errno);
+            }
+            m_stated = true;
+        }
+        return m_stat.st_size;
+    }
+
 }
