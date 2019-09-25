@@ -1,15 +1,27 @@
 #ifndef MAIEVERTIAS_FILEPOSIX_H
 #define MAIEVERTIAS_FILEPOSIX_H
 
+#include <exception>
+#include <dirent.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "Path.h"
-#include "dirent.h"
-#include "sys/stat.h"
-#include "fcntl.h"
 
 namespace maievertias{
     class File{
     public:
         static File current();
+
+        class GetInfoError : public std::exception{
+        public:
+            GetInfoError(int err);
+            ~GetInfoError();
+            virtual const char *what() const noexcept ;
+        protected:
+        private:
+            int m_err;
+        };
 
         class iterator{
         public:
@@ -28,22 +40,21 @@ namespace maievertias{
             DIR *m_dir;
         };
 
-        File(const Path &);
-        File(Path &&);
+        File(Path path);
         ~File();
 
+        //read-only
         const Path &path()const noexcept;
-        Path &path()noexcept;
 
-        bool isRegularFile()const noexcept;
-        bool isDirectory()const noexcept;
-        bool isFIFO()const noexcept;
-        bool isBlockFile()const noexcept;
-        bool isCharacterFile()const noexcept;
-        bool isSocket()const noexcept;
-        //bool isEmpty()const noexcept;
-        bool isSymlink()const noexcept;
-        bool isOther()const noexcept;
+        bool isRegularFile();
+        bool isDirectory();
+        bool isFIFO();
+        bool isBlockFile();
+        bool isCharacterFile();
+        bool isSocket();
+        //bool isEmpty();
+        bool isSymlink();
+        bool isOther();
 
         bool exist()const noexcept;
         operator bool()const noexcept;
@@ -53,9 +64,15 @@ namespace maievertias{
         File copy(const Path &);
         File &move(const Path &);
         void remove();
-        void create(Type type);
+
+        iterator begin();
+        iterator end();
     protected:
     private:
+        void m_open_if_not();
+
+        bool m_stated;
+        struct stat m_stat;
         Path m_path;
     };
 }
