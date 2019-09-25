@@ -54,7 +54,6 @@ namespace maievertias{
         bool isSocket();
         //bool isEmpty();
         bool isSymlink();
-        bool isOther();
 
         bool exist()const noexcept;
         operator bool()const noexcept;

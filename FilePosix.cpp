@@ -68,7 +68,6 @@ namespace maievertias{
 
     bool File::isRegularFile(){
         if(!m_stated){
-            //ensure the file exist outside
             if(stat(m_path.c_str(),&m_stat)!=0){
                 throw GetInfoError(errno);
             }
@@ -78,31 +77,63 @@ namespace maievertias{
     }
 
     bool File::isDirectory(){
-        return false;
+        if(!m_stated){
+            if(stat(m_path.c_str(),&m_stat)!=0){
+                throw GetInfoError(errno);
+            }
+            m_stated = true;
+        }
+        return S_ISDIR(m_stat.st_mode);
     }
 
     bool File::isFIFO(){
-        return false;
+        if(!m_stated){
+            if(stat(m_path.c_str(),&m_stat)!=0){
+                throw GetInfoError(errno);
+            }
+            m_stated = true;
+        }
+        return S_ISFIFO(m_stat.st_mode);
     }
 
     bool File::isBlockFile(){
-        return false;
+        if(!m_stated){
+            if(stat(m_path.c_str(),&m_stat)!=0){
+                throw GetInfoError(errno);
+            }
+            m_stated = true;
+        }
+        return S_ISBLK(m_stat.st_mode);
     }
 
     bool File::isCharacterFile(){
-        return false;
+        if(!m_stated){
+            if(stat(m_path.c_str(),&m_stat)!=0){
+                throw GetInfoError(errno);
+            }
+            m_stated = true;
+        }
+        return S_ISCHR(m_stat.st_mode);
     }
 
     bool File::isSocket(){
-        return false;
+        if(!m_stated){
+            if(stat(m_path.c_str(),&m_stat)!=0){
+                throw GetInfoError(errno);
+            }
+            m_stated = true;
+        }
+        return S_ISSOCK(m_stat.st_mode);
     }
 
     bool File::isSymlink(){
-        return false;
-    }
-
-    bool File::isOther(){
-        return false;
+        if(!m_stated){
+            if(stat(m_path.c_str(),&m_stat)!=0){
+                throw GetInfoError(errno);
+            }
+            m_stated = true;
+        }
+        return S_ISLINK(m_stat.st_mode);
     }
 
     bool File::exist() const noexcept{
