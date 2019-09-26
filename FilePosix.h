@@ -40,7 +40,7 @@ namespace maievertias{
 
         std::uint32_t size()const;
 
-        File copy(const Path &);
+        File copy(const Path &);///todo
         File &move(const Path &path);
         File &rename(const Path &name);
         File &remove();
