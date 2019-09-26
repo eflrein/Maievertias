@@ -227,13 +227,7 @@ namespace maievertias{
     }
 
     Path &Path::operator/=(const Path &rhs) noexcept{
-        if(m_raw_path.back() == m_separator){
-            m_raw_path += rhs.m_raw_path;
-            return this->changeSeparator(m_separator);
-        }
-        m_raw_path.push_back(m_separator);
-        m_raw_path += rhs.m_raw_path;
-        return this->changeSeparator(m_separator);
+        return (*this = *this / rhs);
     }
 
 
