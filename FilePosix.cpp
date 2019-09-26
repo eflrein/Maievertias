@@ -138,4 +138,22 @@ namespace maievertias{
         return m_stat.st_size;
     }
 
+    File &File::move(const Path &path){
+        if(::rename(m_path.c_str(),path.c_str())!= 0){
+            throw FileError(errno);
+        }
+        return (*this = File(path));
+    }
+
+    File &File::rename(const Path &name){
+        return move(m_path.parent() / name);
+    }
+
+    File &File::remove(){
+        if(::remove(m_path.c_str()) != 0){
+            throw FileError(errno);
+        }
+        return *this;
+    }
+
 }

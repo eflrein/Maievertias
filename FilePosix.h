@@ -41,9 +41,9 @@ namespace maievertias{
         std::uint32_t size()const;
 
         File copy(const Path &);
-        File &move(const Path &);
-        void remove();
-
+        File &move(const Path &path);
+        File &rename(const Path &name);
+        File &remove();
 
     protected:
     private:
