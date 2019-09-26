@@ -1,8 +1,6 @@
 #include "DirectoryPosix.h"
 
 namespace maievertias{
-
-
     ///iterator
 
     Directory::iterator::iterator(DIR *dir,const Path &path)
