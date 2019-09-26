@@ -135,10 +135,6 @@ namespace maievertias{
         }
     }
 
-    Path Path::path() const{
-        return Path(*this);
-    }
-
     Path Path::root() const {
         if(hasRoot()){
             auto &p = m_components.front();

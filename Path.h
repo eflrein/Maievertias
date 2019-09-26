@@ -57,7 +57,6 @@ namespace maievertias{
         Path name()const;
         Path extension()const;
         Path parent()const;
-        Path path()const;
         Path root()const;
         bool empty()const noexcept;
         bool absolute()const noexcept;
