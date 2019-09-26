@@ -1,7 +1,7 @@
 #ifndef MAIEVERTIAS_DIRECTORY_H
 #define MAIEVERTIAS_DIRECTORY_H
 
-#if  defined(__GUNC__) || defined(__MINGW32__)
+#if  defined(__GNUC__) || defined(__MINGW32__)
 #include "DirectoryPosix.h"
 #endif
 

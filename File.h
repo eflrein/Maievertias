@@ -1,7 +1,7 @@
 #ifndef MAIEVERTIAS_FILE_H
 #define MAIEVERTIAS_FILE_H
 
-#if  defined(__GUNC__) || defined(__MINGW32__)
+#if  defined(__GNUC__) || defined(__MINGW32__)
 #include "FilePosix.h"
 #endif
 
