@@ -38,7 +38,7 @@ namespace maievertias{
     }
 
     ///directory
-    Directory::Directory(File &file)
+    Directory::Directory(const File &file)
         :m_file(file),
          m_dir(nullptr){
         m_dir = opendir(m_file.path().c_str());
@@ -50,11 +50,11 @@ namespace maievertias{
         closedir(m_dir);
     }
 
-    Directory::iterator Directory::begin(){
+    Directory::iterator Directory::begin()const{
         return iterator(m_dir,m_file.path());
     }
 
-    Directory::iterator Directory::end(){
+    Directory::iterator Directory::end()const{
         return iterator(nullptr,m_file.path());///construct a "" path
     }
 

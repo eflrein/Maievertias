@@ -68,7 +68,7 @@ namespace maievertias{
         return m_path;
     }
 
-    bool File::isRegularFile(){
+    bool File::isRegularFile()const{
         if(!m_stated){
             if(stat(m_path.c_str(),&m_stat)!=0){
                 throw FileError(errno);
@@ -78,7 +78,7 @@ namespace maievertias{
         return S_ISREG(m_stat.st_mode);
     }
 
-    bool File::isDirectory(){
+    bool File::isDirectory()const{
         if(!m_stated){
             if(stat(m_path.c_str(),&m_stat)!=0){
                 throw FileError(errno);
@@ -88,7 +88,7 @@ namespace maievertias{
         return S_ISDIR(m_stat.st_mode);
     }
 
-    bool File::isFIFO(){
+    bool File::isFIFO()const{
         if(!m_stated){
             if(stat(m_path.c_str(),&m_stat)!=0){
                 throw FileError(errno);
@@ -98,7 +98,7 @@ namespace maievertias{
         return S_ISFIFO(m_stat.st_mode);
     }
 
-    bool File::isBlockFile(){
+    bool File::isBlockFile()const{
         if(!m_stated){
             if(stat(m_path.c_str(),&m_stat)!=0){
                 throw FileError(errno);
@@ -108,7 +108,7 @@ namespace maievertias{
         return S_ISBLK(m_stat.st_mode);
     }
 
-    bool File::isCharacterFile(){
+    bool File::isCharacterFile()const{
         if(!m_stated){
             if(stat(m_path.c_str(),&m_stat)!=0){
                 throw FileError(errno);
@@ -128,7 +128,7 @@ namespace maievertias{
         return exist();
     }
 
-    std::uint32_t File::size(){
+    std::uint32_t File::size()const{
         if(!m_stated){
             if(stat(m_path.c_str(),&m_stat)!=0){
                 throw FileError(errno);

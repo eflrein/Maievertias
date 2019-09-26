@@ -28,17 +28,17 @@ namespace maievertias{
         //read-only
         const Path &path()const noexcept;
 
-        bool isRegularFile();
-        bool isDirectory();
-        bool isFIFO();
-        bool isBlockFile();
-        bool isCharacterFile();
+        bool isRegularFile()const;
+        bool isDirectory()const;
+        bool isFIFO()const;
+        bool isBlockFile()const;
+        bool isCharacterFile()const;
         //bool isEmpty();
 
         bool exist()const noexcept;
         operator bool()const noexcept;
 
-        std::uint32_t size();
+        std::uint32_t size()const;
 
         File copy(const Path &);
         File &move(const Path &);
@@ -47,8 +47,8 @@ namespace maievertias{
 
     protected:
     private:
-        bool m_stated;
-        struct stat m_stat;
+        mutable bool m_stated;
+        mutable struct stat m_stat;
         Path m_path;
     };
 }

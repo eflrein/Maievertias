@@ -30,7 +30,7 @@ namespace maievertias{
             Path m_name;
         };
 
-        Directory(File &file);
+        Directory(const File &file);
         Directory(const Directory &) = delete;
         Directory(Directory &&) = delete;
         ~Directory();
@@ -38,11 +38,11 @@ namespace maievertias{
         Directory &operator=(const Directory &) = delete;
         Directory &operator=(Directory &&) = delete;
 
-        iterator begin();
-        iterator end();
+        iterator begin()const;
+        iterator end()const;
     protected:
     private:
-        File &m_file;
+        const File &m_file;
         DIR *m_dir;
     };
 }
