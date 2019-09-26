@@ -119,7 +119,6 @@ namespace maievertias{
     }
 
 
-
     bool File::exist() const noexcept{
         return access(m_path.c_str(),F_OK) == 0;
     }
@@ -155,5 +154,10 @@ namespace maievertias{
         }
         return *this;
     }
+
+    bool File::empty() const{
+        return size() == 0;
+    }
+
 
 }

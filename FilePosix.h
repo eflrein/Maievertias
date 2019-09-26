@@ -33,12 +33,12 @@ namespace maievertias{
         bool isFIFO()const;
         bool isBlockFile()const;
         bool isCharacterFile()const;
-        //bool isEmpty();
 
         bool exist()const noexcept;
         operator bool()const noexcept;
 
         std::uint32_t size()const;
+        bool empty()const;
 
         File copy(const Path &);///todo
         File &move(const Path &path);
