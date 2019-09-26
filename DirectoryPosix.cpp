@@ -11,9 +11,10 @@ namespace maievertias{
          m_name(""){
         if(dir == nullptr){
             m_name = Path("");
+        }else{
+            dirent *p = readdir(dir);
+            m_name = Path(p == nullptr ? "" : p->d_name);
         }
-        dirent *p = readdir(dir);
-        m_name = Path(p == nullptr ? "" : p->d_name);
     }
 
     Directory::iterator::~iterator() = default;

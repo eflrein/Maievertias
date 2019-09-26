@@ -219,13 +219,11 @@ namespace maievertias{
 
     Path Path::operator/(const Path &rhs) const noexcept{
         if(m_raw_path.back() == m_separator){
-            return Path(m_raw_path+rhs.m_raw_path).changeSeparator(m_separator);
+            ///auto reconstruct m_compoent
+            return Path(m_raw_path+rhs.m_raw_path);
+        }else{
+            return Path(m_raw_path+std::string(1,m_separator)+rhs.m_raw_path);
         }
-        auto res = *this;
-        res.m_raw_path.push_back(m_separator);
-        res.m_raw_path += rhs.m_raw_path;
-        res.changeSeparator(m_separator);
-        return res;
     }
 
     Path &Path::operator/=(const Path &rhs) noexcept{
