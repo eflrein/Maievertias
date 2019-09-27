@@ -5,34 +5,30 @@ namespace maievertias{
 
     Directory::iterator::iterator(DIR *dir,const Path &path)
         :m_dir(dir),
-         m_path(path),
-         m_name(""){
-        if(dir == nullptr){
-            m_name = Path("");
-        }else{
-            dirent *p = readdir(dir);
-            m_name = Path(p == nullptr ? "" : p->d_name);
+         m_dirinfo(nullptr),
+         m_path(path){
+        if(dir != nullptr){
+            m_dirinfo = readdir(dir);
         }
     }
 
     Directory::iterator::~iterator() = default;
 
     Directory::iterator &Directory::iterator::operator++() noexcept{
-        dirent *p = readdir(m_dir);
-        m_name = Path(p == nullptr ? "" : p->d_name);
+        m_dirinfo = readdir(m_dir);
         return *this;
     }
 
     File Directory::iterator::operator*() const noexcept{
-        return File(m_path/m_name);
+        return File(m_path/Path(m_dirinfo->d_name));
     }
 
     bool Directory::iterator::operator==(const Directory::iterator &rhs) const noexcept{
-        return m_name == rhs.m_name;
+        return m_dirinfo == nullptr;
     }
 
     bool Directory::iterator::operator!=(const Directory::iterator &rhs) const noexcept{
-        return m_name != rhs.m_name;
+        return m_dirinfo != nullptr;
     }
 
     ///directory
@@ -53,7 +49,7 @@ namespace maievertias{
     }
 
     Directory::iterator Directory::end()const{
-        return iterator(nullptr,m_file.path());///construct a "" path
+        return iterator(nullptr,m_file.path());
     }
 
 }

@@ -26,8 +26,8 @@ namespace maievertias{
         protected:
         private:
             DIR *m_dir;
+            dirent *m_dirinfo;
             const Path &m_path;
-            Path m_name;
         };
 
         Directory(const File &file);
