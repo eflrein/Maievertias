@@ -11,7 +11,6 @@
 namespace maievertias{
     class File{
     public:
-
         class FileError : public std::exception{
         public:
             FileError(int err);
