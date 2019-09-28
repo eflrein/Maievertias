@@ -11,6 +11,8 @@
 namespace maievertias{
     class File{
     public:
+        static File getCurrentDirectory();
+    
         class FileError : public std::exception{
         public:
             FileError(int err);
@@ -40,6 +42,10 @@ namespace maievertias{
         bool empty()const;
 
         File copy(const Path &);///todo
+        File &createDirectory();
+        File &createRegularFile();
+        File &createFIFO();
+        File &createBlockFile();
         File &move(const Path &path);
         File &rename(const Path &name);
         File &remove();
