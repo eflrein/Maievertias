@@ -41,11 +41,7 @@ namespace maievertias{
         std::uint32_t size()const;
         bool empty()const;
 
-        File copy(const Path &);///todo
-        File &createDirectory();
-        File &createRegularFile();
-        File &createFIFO();
-        File &createBlockFile();
+        File copy(const Path &);//todo
         File &move(const Path &path);
         File &rename(const Path &name);
         File &remove();

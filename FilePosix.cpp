@@ -1,6 +1,7 @@
 #include "FilePosix.h"
 
 #include <utility>
+#include <memory>
 
 namespace maievertias{
 
@@ -57,6 +58,20 @@ namespace maievertias{
     }
 
     ///File
+    File File::getCurrentDirectory(){
+        //todo test:overflow this string
+        int size = 64;
+        auto str = std::make_unique<char[]>(size);
+        while(getcwd(str.get(),size) == nullptr){
+            if(errno == ERANGE){
+                str = std::make_unique<char[]>(size *= 2);
+            }else{
+                throw FileError(errno);
+            }
+        }
+        return File(Path(std::string(str.get())));
+    }
+
     File::File(Path path)
         :m_stated(false),
          m_stat{},

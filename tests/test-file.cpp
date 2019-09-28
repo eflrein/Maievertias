@@ -1,6 +1,7 @@
 #include "XTest/XTest.h"
 #include "File.h"
 #include "Directory.h"
+#include <memory>
 
 namespace fs = maievertias;
 
@@ -46,10 +47,16 @@ CASE_BEGIN(delete_test)
     ASSERT(!f.remove().exist(),"File exist , delete failed");
 CASE_END
 
+CASE_BEGIN(get_current_dir_test)
+    auto d = fs::File::getCurrentDirectory();
+    INFO(d.path());
+CASE_END
+
 RUN(file_exist_test,
     file_noexist_test,
-    directory_iterator
+    directory_iterator,
     //move_test //passed,
     //rename_test//passed
     //delete_test //passed
+    get_current_dir_test
 )
