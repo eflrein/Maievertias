@@ -33,61 +33,20 @@ namespace maievertias{
     }
 
     ///Path
+    Path::Path(const char *str)
+        :m_separator('/'),
+         m_has_root(false),
+         m_raw_path(str),
+         m_components(){
+        m_init();
+    }
+
     Path::Path(std::string str)
         :m_separator('/'),
          m_has_root(false),
          m_raw_path(std::move(str)),
          m_components(){
-        //empty
-        if(m_raw_path.empty())return;
-        //cache some var
-        auto beg = m_raw_path.begin();
-        auto end = m_raw_path.end();
-        //detect separator
-        for(auto &c:m_raw_path){
-            if(c == '\\'){
-                m_separator = '\\';
-                break;
-            }else if(c == '/'){
-                m_separator = '/';
-                break;
-            }
-        }
-        //replace all separator
-        for(auto &c:m_raw_path){
-            if(c == '/' || c == '\\'){
-                c = m_separator;
-            }
-        }
-        //detect root
-        auto itr = beg;
-        if(*itr == m_separator){
-            //separator is the 1st character
-            //root directory
-            m_has_root = true;
-            ++itr;
-            m_components.emplace_back(beg,itr);
-        }else{
-            for(;itr != end && *itr != m_separator;++itr);
-            --itr;
-            if(*itr == ':'){
-                //windows derive symbol
-                m_has_root = true;
-            }
-            itr = beg;
-        }
-        //split component
-        for(auto itrl = itr;itrl != end;){
-            auto itrr = std::next(itrl);
-            for(;itrr != end && *itrr != m_separator;++itrr);
-            if(itrr == end){
-                m_components.emplace_back(itrl,end);
-                break;
-            }else{
-                m_components.emplace_back(itrl,itrr);
-                itrl = std::next(itrr);
-            }
-        }
+        m_init();
     }
 
     Path::Path(const Path &) = default;
@@ -225,6 +184,60 @@ namespace maievertias{
     Path &Path::operator/=(const Path &rhs) noexcept{
         return (*this = *this / rhs);
     }
+
+    void Path::m_init(){
+        //empty
+        if(m_raw_path.empty())return;
+        //cache some var
+        auto beg = m_raw_path.begin();
+        auto end = m_raw_path.end();
+        //detect separator
+        for(auto &c:m_raw_path){
+            if(c == '\\'){
+                m_separator = '\\';
+                break;
+            }else if(c == '/'){
+                m_separator = '/';
+                break;
+            }
+        }
+        //replace all separator
+        for(auto &c:m_raw_path){
+            if(c == '/' || c == '\\'){
+                c = m_separator;
+            }
+        }
+        //detect root
+        auto itr = beg;
+        if(*itr == m_separator){
+            //separator is the 1st character
+            //root directory
+            m_has_root = true;
+            ++itr;
+            m_components.emplace_back(beg,itr);
+        }else{
+            for(;itr != end && *itr != m_separator;++itr);
+            --itr;
+            if(*itr == ':'){
+                //windows derive symbol
+                m_has_root = true;
+            }
+            itr = beg;
+        }
+        //split component
+        for(auto itrl = itr;itrl != end;){
+            auto itrr = std::next(itrl);
+            for(;itrr != end && *itrr != m_separator;++itrr);
+            if(itrr == end){
+                m_components.emplace_back(itrl,end);
+                break;
+            }else{
+                m_components.emplace_back(itrl,itrr);
+                itrl = std::next(itrr);
+            }
+        }
+    }
+
 
 
 }

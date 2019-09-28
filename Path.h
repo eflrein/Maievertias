@@ -34,6 +34,7 @@ namespace maievertias{
             itr_t m_itr;
         };
     
+        Path(const char *str);
         Path(std::string str);
         Path(const Path &);
         Path(Path &&)noexcept;
@@ -83,6 +84,8 @@ namespace maievertias{
 //        }
     protected:
     private:
+        void m_init();
+        
         char m_separator;
         bool m_has_root;
         std::string m_raw_path;
