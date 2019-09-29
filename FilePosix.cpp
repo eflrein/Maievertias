@@ -59,7 +59,6 @@ namespace maievertias{
 
     ///File
     File File::getCurrentDirectory(){
-        //todo test:overflow this string
         int size = 64;
         auto str = std::make_unique<char[]>(size);
         while(getcwd(str.get(),size) == nullptr){
