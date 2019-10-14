@@ -33,7 +33,8 @@ namespace maievertias{
         private:
             itr_t m_itr;
         };
-    
+
+        Path();
         Path(const char *str);
         Path(std::string str);
         Path(const Path &);

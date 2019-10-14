@@ -33,6 +33,11 @@ namespace maievertias{
     }
 
     ///Path
+    Path::Path()
+        :m_separator('/'),
+         m_has_root(false),
+         m_raw_path(),
+         m_components(){}
     Path::Path(const char *str)
         :m_separator('/'),
          m_has_root(false),
